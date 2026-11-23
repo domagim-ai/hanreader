@@ -3,7 +3,8 @@
   var $ = function (id) { return document.getElementById(id); };
   var viewerEl = $('viewer'), nameEl = $('filename'), statusEl = $('status'), fileInput = $('file-input');
 
-  var FONT_STEPS = [13, 15, 17, 19, 22, 25, 29, 34];
+  var FONT_STEPS = [13, 15, 17, 19, 22, 25, 29, 34, 40, 48];
+  var FONT_DEFAULT = 17;
   var ZOOM_STEPS = [1, 1.25, 1.5, 2, 2.5, 3, 4];
   var state = {
     fontIndex: clampIndex(parseInt(localStorage.getItem('fontIndex'), 10), FONT_STEPS, 2),
@@ -48,6 +49,7 @@
     } else {
       var f = Math.max(0, Math.min(FONT_STEPS.length - 1, state.fontIndex + delta));
       if (f !== state.fontIndex) { state.fontIndex = f; applyFont(); }
+      toast('글자 크기 ' + Math.round(FONT_STEPS[f] / FONT_DEFAULT * 100) + '%');
     }
   }
 

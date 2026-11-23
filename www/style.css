@@ -43,6 +43,17 @@ body {
 }
 #btn-open, #welcome button { background: var(--accent) !important; color: #fff !important; border-color: var(--accent) !important; white-space: nowrap; }
 html.dark #btn-open, html.dark #welcome button { color: #10233f !important; }
+/* 글자 크기 단추: 작은 가 / 큰 가 로 구분하고 눈에 띄게 채운다 */
+#toolbar .size-btn {
+  min-width: 48px; height: 40px; padding: 0 8px;
+  display: inline-flex; align-items: baseline; justify-content: center; gap: 1px;
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  border-color: var(--accent); color: var(--fg); font-weight: 700; line-height: 38px;
+}
+#toolbar .size-btn:active { background: color-mix(in srgb, var(--accent) 40%, transparent); }
+.size-btn .ga.small { font-size: 14px; }
+.size-btn .ga.big { font-size: 22px; }
+.size-btn .sign { font-size: 18px; color: var(--accent); }
 #filename {
   flex: 1; min-width: 0; padding: 0 6px;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
@@ -69,7 +80,8 @@ html.dark #btn-open, html.dark #welcome button { color: #10233f !important; }
 #status {
   position: fixed; left: 50%; bottom: calc(24px + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px))); transform: translateX(-50%);
   max-width: 90vw; padding: 10px 16px; border-radius: 10px;
-  background: rgba(20,20,20,.88); color: #fff; font-size: 14px; z-index: 20;
+  background: rgba(20,20,20,.9); color: #fff; font-size: 17px; font-weight: 600; z-index: 20;
+  border: 1px solid rgba(255,255,255,.25);
 }
 .error-box {
   margin: 24px 16px; padding: 16px; border: 1px solid var(--line); border-radius: 10px;
