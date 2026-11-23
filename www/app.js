@@ -24,6 +24,16 @@
   function applyDark(on) {
     document.documentElement.classList.toggle('dark', on);
     localStorage.setItem('dark', on ? '1' : '0');
+    syncSystemBars(on);
+  }
+  // 상태 표시줄·내비게이션 바의 아이콘 색을 앱 화면(밝음/어두움)에 맞춘다.
+  function syncSystemBars(dark) {
+    try {
+      var c = window.Capacitor;
+      if (c && c.isNativePlatform && c.isNativePlatform() && c.Plugins && c.Plugins.SystemBars) {
+        c.Plugins.SystemBars.setStyle({ style: dark ? 'DARK' : 'LIGHT' });
+      }
+    } catch (e) {}
   }
   var savedDark = localStorage.getItem('dark');
   applyDark(savedDark === null ? window.matchMedia('(prefers-color-scheme: dark)').matches : savedDark === '1');
@@ -162,6 +172,12 @@
   }
 
   if (isNative && cap.Plugins && cap.Plugins.App) {
+    // 뒤로 가기: 정보 창이 열려 있으면 닫고, 아니면 앱을 닫아 이전 앱(카카오톡 등)으로 돌아간다.
+    cap.Plugins.App.addListener('backButton', function () {
+      var info = $('info');
+      if (info.open) { info.close(); return; }
+      cap.Plugins.App.exitApp();
+    });
     cap.Plugins.App.addListener('appUrlOpen', function (ev) { openNativeUrl(ev && ev.url); });
     cap.Plugins.App.getLaunchUrl().then(function (r) { if (r && r.url) openNativeUrl(r.url); }).catch(function () {});
   }

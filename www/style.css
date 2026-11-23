@@ -29,8 +29,8 @@ body {
 
 #toolbar {
   position: fixed; top: 0; left: 0; right: 0; z-index: 10;
-  height: calc(var(--bar-h) + env(safe-area-inset-top, 0px));
-  padding: env(safe-area-inset-top, 0px) 6px 0 6px;
+  height: calc(var(--bar-h) + var(--safe-area-inset-top, env(safe-area-inset-top, 0px)));
+  padding: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)) 6px 0 6px;
   display: flex; align-items: center; gap: 4px;
   background: var(--bar);
   border-bottom: 1px solid var(--line);
@@ -50,9 +50,15 @@ html.dark #btn-open, html.dark #welcome button { color: #10233f !important; }
 }
 
 #viewer {
-  padding-top: calc(var(--bar-h) + env(safe-area-inset-top, 0px));
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-top: calc(var(--bar-h) + var(--safe-area-inset-top, env(safe-area-inset-top, 0px)));
+  padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
   min-height: 100%;
+}
+/* 화면 아래 시스템 내비게이션 바 자리: 본문이 버튼 밑으로 비치지 않게 막는다 */
+#navpad {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+  height: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+  background: var(--bar);
 }
 #welcome { padding: 18vh 24px 0; text-align: center; }
 #welcome h1 { margin: 0 0 8px; font-size: 28px; }
@@ -61,7 +67,7 @@ html.dark #btn-open, html.dark #welcome button { color: #10233f !important; }
 .muted { color: var(--muted); font-size: 14px; }
 
 #status {
-  position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+  position: fixed; left: 50%; bottom: calc(24px + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px))); transform: translateX(-50%);
   max-width: 90vw; padding: 10px 16px; border-radius: 10px;
   background: rgba(20,20,20,.88); color: #fff; font-size: 14px; z-index: 20;
 }
