@@ -72,3 +72,26 @@ gradle = gradle
   .replace(/versionName\s+"[^"]*"/, `versionName "${name}"`);
 writeFileSync(gradlePath, gradle);
 console.log(`build.gradle: 버전 ${name} (${code})`);
+
+// 서명: KEYSTORE_FILE이 주어지면 릴리스 빌드를 그 키로 서명한다(키와 비밀번호는 GitHub Secrets에서 온다).
+if (process.env.KEYSTORE_FILE) {
+  let g = readFileSync(gradlePath, 'utf8');
+  if (!g.includes('signingConfigs')) {
+    const signing = `    signingConfigs {
+        release {
+            storeFile file(System.getenv("KEYSTORE_FILE"))
+            storePassword System.getenv("KEYSTORE_PASSWORD")
+            keyAlias "hanreader"
+            keyPassword System.getenv("KEYSTORE_PASSWORD")
+            storeType "pkcs12"
+        }
+    }
+`;
+    const at = g.indexOf('    buildTypes {');
+    if (at < 0) throw new Error('build.gradle에서 buildTypes를 찾지 못했습니다.');
+    g = g.slice(0, at) + signing + g.slice(at);
+    g = g.replace(/(buildTypes\s*\{\s*release\s*\{)/, '$1\n            signingConfig signingConfigs.release');
+    writeFileSync(gradlePath, g);
+  }
+  console.log('build.gradle: 릴리스 서명 설정');
+}
