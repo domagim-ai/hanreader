@@ -1,0 +1,123 @@
+:root {
+  --bg: #f4f4f1;
+  --paper: #ffffff;
+  --fg: #1c1c1a;
+  --muted: #6b6b66;
+  --line: #d6d6d0;
+  --accent: #1f5fbf;
+  --bar: #ffffff;
+  --font-size: 17px;
+  --bar-h: 48px;
+}
+html.dark {
+  --bg: #121212;
+  --paper: #1c1c1c;
+  --fg: #e6e6e3;
+  --muted: #9a9a94;
+  --line: #3a3a38;
+  --accent: #7fb0ff;
+  --bar: #1c1c1c;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, -apple-system, "Noto Sans KR", "Malgun Gothic", sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+
+#toolbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+  height: calc(var(--bar-h) + env(safe-area-inset-top, 0px));
+  padding: env(safe-area-inset-top, 0px) 6px 0 6px;
+  display: flex; align-items: center; gap: 4px;
+  background: var(--bar);
+  border-bottom: 1px solid var(--line);
+}
+#toolbar button, #welcome button, dialog button {
+  height: 36px; min-width: 40px; padding: 0 10px;
+  border: 1px solid var(--line); border-radius: 8px;
+  background: transparent; color: var(--fg);
+  font-size: 15px; font-family: inherit;
+}
+#btn-open, #welcome button { background: var(--accent) !important; color: #fff !important; border-color: var(--accent) !important; white-space: nowrap; }
+html.dark #btn-open, html.dark #welcome button { color: #10233f !important; }
+#filename {
+  flex: 1; min-width: 0; padding: 0 6px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-size: 14px; color: var(--muted);
+}
+
+#viewer {
+  padding-top: calc(var(--bar-h) + env(safe-area-inset-top, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  min-height: 100%;
+}
+#welcome { padding: 18vh 24px 0; text-align: center; }
+#welcome h1 { margin: 0 0 8px; font-size: 28px; }
+#welcome p { margin: 6px 0; }
+#welcome button { margin-top: 20px; height: 44px; padding: 0 24px; font-size: 16px; }
+.muted { color: var(--muted); font-size: 14px; }
+
+#status {
+  position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+  max-width: 90vw; padding: 10px 16px; border-radius: 10px;
+  background: rgba(20,20,20,.88); color: #fff; font-size: 14px; z-index: 20;
+}
+.error-box {
+  margin: 24px 16px; padding: 16px; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--paper);
+}
+.error-box h2 { margin: 0 0 8px; font-size: 17px; }
+.error-box p { margin: 4px 0; color: var(--muted); font-size: 14px; word-break: break-all; }
+
+/* TXT */
+.doc-txt {
+  margin: 0; padding: 16px;
+  font-size: var(--font-size); line-height: 1.7;
+  white-space: pre-wrap; overflow-wrap: anywhere;
+  font-family: inherit;
+}
+
+/* HWPX (재배치) */
+.doc-hwpx {
+  padding: 16px; background: var(--paper); min-height: 100vh;
+  font-size: var(--font-size); line-height: 1.7; overflow-wrap: anywhere;
+}
+.doc-hwpx p { margin: 0 0 .35em; min-height: 1em; white-space: pre-wrap; }
+.doc-hwpx .tbl-wrap { overflow-x: auto; margin: .6em 0; }
+.doc-hwpx table { border-collapse: collapse; min-width: 100%; }
+.doc-hwpx td { border: 1px solid var(--line); padding: 4px 6px; vertical-align: top; font-size: .92em; }
+.doc-hwpx td p { margin: 0; }
+.doc-hwpx img { max-width: 100%; height: auto; }
+.doc-hwpx .section-break { border: 0; border-top: 1px dashed var(--line); margin: 1.5em 0; }
+
+/* PDF */
+.doc-pdf { overflow-x: auto; padding: 8px 0; }
+.doc-pdf .pages { margin: 0 auto; }
+.doc-pdf .page {
+  position: relative; margin: 0 auto 8px; background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,.25);
+}
+.doc-pdf .page canvas { display: block; width: 100%; height: 100%; }
+.doc-pdf .page .num {
+  position: absolute; right: 6px; bottom: 4px; font-size: 11px; color: #888;
+  background: rgba(255,255,255,.7); padding: 0 4px; border-radius: 4px;
+}
+
+/* HWP (hwp.js 페이지 렌더링을 화면 폭에 맞춰 축소) */
+.doc-hwp { overflow-x: auto; padding: 8px 0; }
+.doc-hwp .hwp-scale { transform-origin: 0 0; }
+.doc-hwp .hwp-text { padding: 16px; font-size: var(--font-size); line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+dialog {
+  width: min(92vw, 480px); border: 1px solid var(--line); border-radius: 12px;
+  background: var(--paper); color: var(--fg); padding: 18px;
+}
+dialog::backdrop { background: rgba(0,0,0,.45); }
+dialog h2 { margin: 0 0 8px; font-size: 19px; }
+dialog h3 { margin: 14px 0 4px; font-size: 14px; color: var(--muted); }
+dialog p, dialog li { font-size: 14px; line-height: 1.6; margin: 4px 0; }
+dialog ul { padding-left: 18px; margin: 0; }
+dialog form { text-align: right; margin-top: 12px; }

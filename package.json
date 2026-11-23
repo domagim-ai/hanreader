@@ -1,0 +1,25 @@
+{
+  "name": "hanreader",
+  "version": "0.1.0",
+  "private": true,
+  "description": "안드로이드용 무료 오픈소스 문서 뷰어 (TXT·PDF·HWPX·HWP)",
+  "license": "MIT",
+  "scripts": {
+    "libs": "node scripts/copy-libs.mjs",
+    "serve": "node scripts/serve.mjs",
+    "android:patch": "node scripts/patch-manifest.mjs"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.6.2",
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/core": "^8.6.2",
+    "@capacitor/filesystem": "^8.1.5",
+    "hwp.js": "^0.0.3",
+    "jszip": "^3.10.2",
+    "pdfjs-dist": "^4.10.38"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.6.2",
+    "esbuild": "^0.28.2"
+  }
+}

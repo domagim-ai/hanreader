@@ -1,0 +1,74 @@
+name: APK 빌드
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+      - 'LICENSE'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: 의존성 설치
+        run: npm ci
+
+      - name: 라이브러리 묶기 (www/libs)
+        run: npm run libs
+
+      - name: 안드로이드 프로젝트 만들기
+        run: npx cap add android
+
+      - name: 인텐트 필터·버전 적용
+        env:
+          VERSION_CODE: ${{ github.run_number }}
+          VERSION_NAME: 0.1.${{ github.run_number }}
+        run: npm run android:patch
+
+      - name: 웹 자산 동기화
+        run: npx cap sync android
+
+      - name: APK 빌드 (디버그 서명)
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - name: 파일 이름 정리
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk hanreader-0.1.${{ github.run_number }}.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hanreader-apk
+          path: hanreader-*.apk
+
+      - name: Releases에 올리기
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="v0.1.${{ github.run_number }}"
+          gh release create "$TAG" hanreader-*.apk \
+            --target "${{ github.sha }}" \
+            --title "한리더 $TAG" \
+            --notes "자동 빌드된 시험판입니다. 아직 디버그 서명이라, 새 판을 설치할 때 이전 판을 먼저 지워야 할 수 있습니다."

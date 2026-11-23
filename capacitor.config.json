@@ -1,0 +1,8 @@
+{
+  "appId": "kr.co.ddanggae.hanreader",
+  "appName": "한리더",
+  "webDir": "www",
+  "android": {
+    "zoomEnabled": true
+  }
+}
