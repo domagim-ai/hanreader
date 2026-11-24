@@ -36,5 +36,5 @@
     return { zoomable: false };
   }
 
-  window.HanTxt = { render: renderTxt, decodeText: decodeText };
+  window.HanTxt = { render: renderTxt, decodeText: decodeText, looksBinary: looksBinary };
 })();

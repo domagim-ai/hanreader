@@ -139,3 +139,38 @@ dialog h3 { margin: 14px 0 4px; font-size: 14px; color: var(--muted); }
 dialog p, dialog li { font-size: 14px; line-height: 1.6; margin: 4px 0; }
 dialog ul { padding-left: 18px; margin: 0; }
 dialog form { text-align: right; margin-top: 12px; }
+
+/* 엑셀: 화면을 가득 채우고 표 영역만 가로·세로로 민다. 시트 탭은 아래에 둔다. */
+.doc-xlsx {
+  position: fixed; left: 0; right: 0;
+  top: calc(var(--bar-h) + var(--safe-area-inset-top, env(safe-area-inset-top, 0px)));
+  bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+  display: flex; flex-direction: column; background: var(--paper);
+}
+.doc-xlsx .sheet-wrap { flex: 1; min-height: 0; overflow: auto; -webkit-overflow-scrolling: touch; }
+.doc-xlsx table { border-collapse: separate; border-spacing: 0; font-size: calc(var(--font-size) * .82); line-height: 1.35; }
+.doc-xlsx td, .doc-xlsx th {
+  border-right: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  padding: .25em .5em; white-space: nowrap; vertical-align: middle; text-align: left;
+}
+.doc-xlsx td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.doc-xlsx td.span { text-align: center; white-space: pre-wrap; }
+.doc-xlsx td.wrap { white-space: pre-wrap; min-width: 14em; overflow-wrap: anywhere; }
+.doc-xlsx td.span.wrap { min-width: 0; }
+.doc-xlsx th {
+  background: var(--bg); color: var(--muted); font-weight: 400; font-size: .8em; text-align: center;
+  position: sticky; top: 0; z-index: 2;
+}
+.doc-xlsx th.rn { left: 0; top: auto; z-index: 1; min-width: 2.6em; padding: .25em .3em; }
+.doc-xlsx th.corner { top: 0; z-index: 3; }
+.doc-xlsx .sheet-more, .doc-xlsx .sheet-empty { padding: 10px 14px; color: var(--muted); font-size: 13px; }
+.doc-xlsx .sheet-tabs {
+  display: flex; gap: 4px; padding: 5px 6px; overflow-x: auto; flex: none;
+  background: var(--bar); border-top: 1px solid var(--line);
+}
+.doc-xlsx .sheet-tabs button {
+  flex: none; height: 34px; padding: 0 12px; border: 1px solid var(--line); border-radius: 8px;
+  background: transparent; color: var(--fg); font-size: 14px; font-family: inherit; white-space: nowrap;
+}
+.doc-xlsx .sheet-tabs button.on { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
+html.dark .doc-xlsx .sheet-tabs button.on { color: #10233f; }

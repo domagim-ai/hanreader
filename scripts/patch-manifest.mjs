@@ -19,12 +19,17 @@ const mimeTypes = [
   'application/vnd.hancom.hwpx',
   'application/hwp+zip',
   'application/x-hwpx',
+  'application/vnd.ms-excel',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'application/vnd.ms-excel.sheet.macroEnabled.12',
+  'text/csv',
+  'text/comma-separated-values',
   'application/octet-stream'
 ];
 
 // 형식을 모르는 채(*/*)로 넘기는 파일 관리자를 위해 확장자로도 받는다.
 // 안드로이드의 pathPattern은 '.'이 여러 개인 경로를 한 번에 못 맞춰 단계별로 적는다.
-const exts = ['hwp', 'hwpx', 'HWP', 'HWPX'];
+const exts = ['hwp', 'hwpx', 'HWP', 'HWPX', 'xls', 'xlsx', 'xlsm', 'XLS', 'XLSX', 'csv', 'CSV'];
 const dots = ['.*\\\\.', '.*\\\\..*\\\\.', '.*\\\\..*\\\\..*\\\\.', '.*\\\\..*\\\\..*\\\\..*\\\\.'];
 const pathPatterns = exts.flatMap((e) => dots.map((d) => d + e));
 

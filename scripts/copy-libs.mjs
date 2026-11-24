@@ -15,6 +15,10 @@ mkdirSync(out, { recursive: true });
 // JSZip
 copyFileSync(join(nm, 'jszip', 'dist', 'jszip.min.js'), join(out, 'jszip.min.js'));
 
+// SheetJS — 엑셀(XLSX·XLS·CSV). full 묶음에는 옛 XLS의 한글(CP949) 코드표가 들어 있다.
+copyFileSync(join(nm, 'xlsx', 'dist', 'xlsx.full.min.js'), join(out, 'xlsx.full.min.js'));
+copyFileSync(join(nm, 'xlsx', 'LICENSE'), join(out, 'LICENSE-sheetjs.txt'));
+
 // PDF.js — 안드로이드 웹뷰가 .mjs의 MIME 형식을 모를 수 있어 .js 이름으로 둔다.
 const pdf = join(nm, 'pdfjs-dist');
 copyFileSync(join(pdf, 'legacy', 'build', 'pdf.min.mjs'), join(out, 'pdf.min.js'));

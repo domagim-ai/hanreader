@@ -100,10 +100,15 @@
       if (fmt.kind === 'pdf') handle = await HanPdf.render(viewerEl, fmt.offset ? bytes.subarray(fmt.offset) : bytes, ctx);
       else if (fmt.kind === 'hwpx') handle = await HanHwpx.render(viewerEl, fmt.zip, ctx);
       else if (fmt.kind === 'hwp') handle = HanHwp.render(viewerEl, bytes, ctx);
+      else if (fmt.kind === 'xlsx') handle = await HanXlsx.render(viewerEl, bytes, ctx);
+      else if (fmt.kind === 'txt' && /\.csv$/i.test(name || '') && !HanTxt.looksBinary(bytes)) {
+        fmt = { kind: 'xlsx' };
+        handle = await HanXlsx.renderCsv(viewerEl, HanTxt.decodeText(bytes), ctx);
+      }
       else if (fmt.kind === 'txt') handle = HanTxt.render(viewerEl, bytes, ctx);
       else throw new Error(fmt.reason || '지원하지 않는 형식입니다.');
 
-      if (ctx.cancelled()) { if (handle && handle.dispose) handle.dispose(); return; }
+      if (ctx.cancelled() || !handle) { if (handle && handle.dispose) handle.dispose(); return; }
       state.current = handle;
       document.body.dataset.kind = fmt.kind;
       setStatus(null);

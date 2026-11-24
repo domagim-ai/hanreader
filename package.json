@@ -2,7 +2,7 @@
   "name": "hanreader",
   "version": "0.1.0",
   "private": true,
-  "description": "안드로이드용 무료 오픈소스 문서 뷰어 (TXT·PDF·HWPX·HWP)",
+  "description": "안드로이드용 무료 오픈소스 문서 뷰어 (TXT·PDF·HWPX·HWP·엑셀)",
   "license": "MIT",
   "scripts": {
     "libs": "node scripts/copy-libs.mjs",
@@ -16,7 +16,8 @@
     "@capacitor/filesystem": "^8.1.5",
     "hwp.js": "^0.0.3",
     "jszip": "^3.10.2",
-    "pdfjs-dist": "^4.10.38"
+    "pdfjs-dist": "^4.10.38",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "devDependencies": {
     "@capacitor/cli": "^8.6.2",

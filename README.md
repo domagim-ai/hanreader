@@ -1,6 +1,6 @@
 # 한리더 (HanReader)
 
-안드로이드 휴대폰에서 **TXT · PDF · HWPX · HWP** 문서를 여는 가벼운 무료 뷰어입니다.
+안드로이드 휴대폰에서 **TXT · PDF · HWPX · HWP · 엑셀(XLSX·XLS·CSV)** 문서를 여는 가벼운 무료 뷰어입니다.
 
 - **문서는 기기 밖으로 나가지 않습니다.** 모든 처리는 휴대폰 안에서 이루어지고, 인터넷이 없어도 동작합니다.
 - 카카오톡·내 파일·메일에서 문서를 누르면 **연결 프로그램** 목록에 나타납니다.
@@ -21,11 +21,12 @@
 | PDF | PDF.js로 쪽마다 그림. 화면 가까이 온 쪽만 그려 메모리를 아낌 | 지원 (암호 걸린 PDF 제외) |
 | HWPX | 압축을 풀어 `Contents/section*.xml`을 읽고, 화면 폭에 맞게 문단·표·그림을 다시 배치 | 지원 (원본 쪽 모양 그대로는 아님) |
 | HWP | hwp.js로 쪽 모양대로 그리고 화면 폭에 맞춰 축소. 그릴 수 없으면 글자만 표시 | 기본 지원 (복잡한 표·서식은 깨질 수 있음) |
+| XLSX · XLS · CSV | SheetJS로 읽어 시트별 표로 표시. 시트 탭, 병합 셀, 숨김 행·열 반영 | 지원 (값 위주. 셀 색·테두리·차트·그림은 표시 안 함, 암호 걸린 파일 제외) |
 
 ## 화면
 
 - `파일 열기` — 기기에서 문서를 고릅니다.
-- `A-` / `A+` — 글 문서(TXT·HWPX)는 글자 크기, 쪽 문서(PDF·HWP)는 배율을 바꿉니다.
+- `가−` / `가+` — 글 문서(TXT·HWPX)와 엑셀은 글자 크기, 쪽 문서(PDF·HWP)는 배율을 바꿉니다.
 - `◐` — 다크 모드.
 - 두 손가락으로 확대·축소할 수 있습니다.
 
@@ -57,6 +58,7 @@ www/
   render-pdf.js   PDF
   render-hwpx.js  HWPX
   render-hwp.js   HWP
+  render-xlsx.js  엑셀(XLSX·XLS·CSV)
 scripts/
   copy-libs.mjs       라이브러리를 www/libs로 복사·묶음
   patch-manifest.mjs  AndroidManifest.xml 인텐트 필터, 버전
@@ -67,7 +69,7 @@ scripts/
 
 본 제품은 한글과컴퓨터의 한글 문서 파일(.hwp) 공개 문서를 참고하여 개발하였습니다.
 
-사용한 오픈소스: [PDF.js](https://github.com/mozilla/pdf.js) (Apache-2.0), [hwp.js](https://github.com/hahnlee/hwp.js) (Apache-2.0), [JSZip](https://github.com/Stuk/jszip) (MIT), [Capacitor](https://github.com/ionic-team/capacitor) (MIT).
+사용한 오픈소스: [PDF.js](https://github.com/mozilla/pdf.js) (Apache-2.0), [hwp.js](https://github.com/hahnlee/hwp.js) (Apache-2.0), [JSZip](https://github.com/Stuk/jszip) (MIT), [SheetJS CE](https://sheetjs.com) (Apache-2.0), [Capacitor](https://github.com/ionic-team/capacitor) (MIT).
 
 ## 라이선스
 

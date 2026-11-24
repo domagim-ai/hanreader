@@ -7,7 +7,7 @@
     return true;
   }
 
-  // 반환: { kind: 'pdf' | 'hwp' | 'hwpx' | 'txt' | 'unsupported', zip?, reason? }
+  // 반환: { kind: 'pdf' | 'hwp' | 'hwpx' | 'xlsx'(XLS 포함) | 'txt' | 'unsupported', zip?, reason? }
   async function detectFormat(bytes) {
     // PDF는 앞에 약간의 쓰레기 바이트가 붙는 경우가 있어 처음 1KB 안에서 찾는다.
     var head = bytes.subarray(0, Math.min(bytes.length, 1024));
@@ -17,6 +17,18 @@
       }
     }
     if (startsWith(bytes, [0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1])) {
+      // HWP와 옛 엑셀(XLS)은 같은 그릇(OLE2 복합 파일)을 쓴다. 안에 든 스트림 이름으로 가른다.
+      try {
+        var names = XLSX.CFB.read(bytes, { type: 'array' }).FullPaths.map(function (p) {
+          return p.replace(/\/$/, '').split('/').pop().toLowerCase();
+        });
+        var has = function (n) { return names.indexOf(n) >= 0; };
+        if (has('fileheader')) return { kind: 'hwp' };
+        if (has('workbook') || has('book')) return { kind: 'xlsx' };
+        if (has('encryptedpackage')) return { kind: 'unsupported', reason: '암호가 걸린 오피스 문서는 열 수 없습니다.' };
+        if (has('worddocument')) return { kind: 'unsupported', reason: '워드(DOC) 문서는 아직 지원하지 않습니다.' };
+        if (has('powerpoint document')) return { kind: 'unsupported', reason: '파워포인트(PPT) 문서는 아직 지원하지 않습니다.' };
+      } catch (e) { /* 그릇을 못 읽으면 HWP로 보고 시도한다 */ }
       return { kind: 'hwp' };
     }
     if (startsWith(bytes, [0x50, 0x4B, 0x03, 0x04])) {
@@ -26,7 +38,10 @@
           return /^Contents\/section\d+\.xml$/i.test(n);
         });
         if (hasSection) return { kind: 'hwpx', zip: zip };
-        return { kind: 'unsupported', reason: 'HWPX가 아닌 압축 파일입니다(예: DOCX, XLSX, ZIP).' };
+        if (zip.files['xl/workbook.xml'] || zip.files['xl/workbook.bin']) return { kind: 'xlsx' };
+        if (zip.files['word/document.xml']) return { kind: 'unsupported', reason: '워드(DOCX) 문서는 아직 지원하지 않습니다.' };
+        if (zip.files['ppt/presentation.xml']) return { kind: 'unsupported', reason: '파워포인트(PPTX) 문서는 아직 지원하지 않습니다.' };
+        return { kind: 'unsupported', reason: '지원하지 않는 압축 파일입니다.' };
       } catch (e) {
         return { kind: 'unsupported', reason: '압축 파일을 열 수 없습니다.' };
       }

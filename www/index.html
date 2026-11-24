@@ -20,7 +20,7 @@
   <main id="viewer">
     <section id="welcome">
       <h1>한리더</h1>
-      <p>TXT · PDF · HWPX · HWP 문서를 엽니다.</p>
+      <p>TXT · PDF · HWPX · HWP · 엑셀 문서를 엽니다.</p>
       <p class="muted">문서는 이 기기 안에서만 처리되며 어디로도 전송되지 않습니다.</p>
       <button id="btn-open2" type="button">파일 열기</button>
     </section>
@@ -29,7 +29,7 @@
   <div id="navpad"></div>
   <div id="status" hidden></div>
   <input id="file-input" type="file" hidden
-         accept=".txt,.pdf,.hwp,.hwpx,text/plain,application/pdf,application/x-hwp,application/haansofthwp,application/vnd.hancom.hwp,application/vnd.hancom.hwpx,application/octet-stream">
+         accept=".txt,.pdf,.hwp,.hwpx,.xlsx,.xlsm,.xls,.csv,text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/plain,application/pdf,application/x-hwp,application/haansofthwp,application/vnd.hancom.hwp,application/vnd.hancom.hwpx,application/octet-stream">
 
   <dialog id="info">
     <h2>한리더 <span id="app-version"></span></h2>
@@ -42,6 +42,7 @@
       <li>PDF.js — Apache License 2.0 (Mozilla)</li>
       <li>hwp.js — Apache License 2.0 (Han Lee)</li>
       <li>JSZip — MIT License (Stuart Knightley 외)</li>
+      <li>SheetJS Community Edition — Apache License 2.0 (SheetJS LLC)</li>
       <li>Capacitor — MIT License (Ionic)</li>
     </ul>
     <form method="dialog"><button type="submit">닫기</button></form>
@@ -49,7 +50,9 @@
 
   <script src="libs/jszip.min.js"></script>
   <script src="libs/hwp.js"></script>
+  <script src="libs/xlsx.full.min.js"></script>
   <script src="detect.js"></script>
+  <script src="render-xlsx.js"></script>
   <script src="render-txt.js"></script>
   <script src="render-hwpx.js"></script>
   <script src="render-hwp.js"></script>
