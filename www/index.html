@@ -28,6 +28,13 @@
 
   <div id="navpad"></div>
   <div id="status" hidden></div>
+  <div id="loading" role="status" aria-live="polite" hidden>
+    <div class="box">
+      <div class="spinner"></div>
+      <div class="title">파일 여는 중…</div>
+      <div id="loading-detail"></div>
+    </div>
+  </div>
   <input id="file-input" type="file" hidden
          accept=".txt,.pdf,.hwp,.hwpx,.xlsx,.xlsm,.xls,.csv,text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/plain,application/pdf,application/x-hwp,application/haansofthwp,application/vnd.hancom.hwp,application/vnd.hancom.hwpx,application/octet-stream">
 

@@ -65,6 +65,21 @@
     toastTimer = setTimeout(function () { statusEl.hidden = true; }, 1200);
   }
 
+  // 화면 가운데에 크게 띄우는 '파일 여는 중' 표시. detail은 진행 상황(예: 3/5 구역).
+  var loadingEl = $('loading'), loadingDetailEl = $('loading-detail');
+  function setLoading(on, detail) {
+    loadingEl.hidden = !on;
+    loadingDetailEl.textContent = (on && detail) || '';
+  }
+  // 무거운 작업을 시작하기 전에 화면이 한 번 그려지도록 잠깐 쉰다.
+  function nextPaint() {
+    return new Promise(function (resolve) {
+      var done = false, go = function () { if (!done) { done = true; resolve(); } };
+      requestAnimationFrame(function () { setTimeout(go, 0); });
+      setTimeout(go, 80);
+    });
+  }
+
   function showError(title, detail) {
     viewerEl.innerHTML = '';
     var box = document.createElement('div');
@@ -80,7 +95,7 @@
     var id = ++state.loadId;
     var ctx = {
       cancelled: function () { return id !== state.loadId; },
-      status: function (t) { if (id === state.loadId) setStatus(t); }
+      status: function (t) { if (id === state.loadId && t) setLoading(true, t); }
     };
 
     if (state.current && state.current.dispose) { try { state.current.dispose(); } catch (e) {} }
@@ -90,7 +105,10 @@
     window.scrollTo(0, 0);
     nameEl.textContent = name || '문서';
     nameEl.title = name || '';
-    setStatus('여는 중…');
+    setStatus(null);
+    setLoading(true);
+    await nextPaint();
+    if (ctx.cancelled()) return;
 
     try {
       if (!bytes || !bytes.length) throw new Error('빈 파일입니다.');
@@ -111,11 +129,11 @@
       if (ctx.cancelled() || !handle) { if (handle && handle.dispose) handle.dispose(); return; }
       state.current = handle;
       document.body.dataset.kind = fmt.kind;
-      setStatus(null);
+      setLoading(false);
     } catch (e) {
       if (ctx.cancelled()) return;
       console.error(e);
-      setStatus(null);
+      setLoading(false);
       showError('문서를 열 수 없습니다', String((e && e.message) || e));
     }
   }
@@ -167,13 +185,13 @@
       if (st && st.name) name = st.name;
     } catch (e) { /* 이름을 못 얻어도 내용은 연다 */ }
 
-    setStatus('여는 중…');
+    setLoading(true);
     try {
       var bytes = await readNative(url);
       await openBytes(bytes, name || '받은 문서');
     } catch (e) {
       console.error(e);
-      setStatus(null);
+      setLoading(false);
       showError('문서를 읽을 수 없습니다', String((e && e.message) || e));
     }
   }
@@ -196,11 +214,11 @@
   fileInput.addEventListener('change', async function () {
     var f = fileInput.files && fileInput.files[0];
     if (!f) return;
-    setStatus('여는 중…');
+    setLoading(true);
     try {
       await openBytes(new Uint8Array(await f.arrayBuffer()), f.name);
     } catch (e) {
-      setStatus(null);
+      setLoading(false);
       showError('파일을 읽을 수 없습니다', String((e && e.message) || e));
     }
   });
