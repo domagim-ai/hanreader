@@ -2,7 +2,7 @@
   "name": "hanreader",
   "version": "0.1.0",
   "private": true,
-  "description": "안드로이드용 무료 오픈소스 문서 뷰어 (TXT·PDF·HWPX·HWP·엑셀)",
+  "description": "안드로이드용 무료 오픈소스 문서 뷰어 (TXT·PDF·HWPX·HWP·엑셀·DXF)",
   "license": "MIT",
   "scripts": {
     "libs": "node scripts/copy-libs.mjs",
@@ -14,6 +14,7 @@
     "@capacitor/app": "^8.1.2",
     "@capacitor/core": "^8.6.2",
     "@capacitor/filesystem": "^8.1.5",
+    "dxf-parser": "^1.1.2",
     "hwp.js": "^0.0.3",
     "jszip": "^3.10.2",
     "pdfjs-dist": "^4.10.38",

@@ -43,6 +43,7 @@
   // A- / A+ : 글 문서(TXT·HWPX)는 글자 크기를, 쪽 문서(PDF·HWP)는 배율을 바꾼다.
   function step(delta) {
     var cur = state.current;
+    if (cur && cur.zoomBy) { cur.zoomBy(delta > 0 ? 1.5 : 1 / 1.5); return; }
     if (cur && cur.zoomable) {
       var z = Math.max(0, Math.min(ZOOM_STEPS.length - 1, state.zoomIndex + delta));
       if (z !== state.zoomIndex) { state.zoomIndex = z; cur.setZoom(ZOOM_STEPS[z]); toast(Math.round(ZOOM_STEPS[z] * 100) + '%'); }
@@ -119,6 +120,7 @@
       else if (fmt.kind === 'hwpx') handle = await HanHwpx.render(viewerEl, fmt.zip, ctx);
       else if (fmt.kind === 'hwp') handle = HanHwp.render(viewerEl, bytes, ctx);
       else if (fmt.kind === 'xlsx') handle = await HanXlsx.render(viewerEl, bytes, ctx);
+      else if (fmt.kind === 'dxf') handle = await HanDxf.render(viewerEl, bytes, ctx);
       else if (fmt.kind === 'txt' && /\.csv$/i.test(name || '') && !HanTxt.looksBinary(bytes)) {
         fmt = { kind: 'xlsx' };
         handle = await HanXlsx.renderCsv(viewerEl, HanTxt.decodeText(bytes), ctx);
@@ -199,8 +201,8 @@
   if (isNative && cap.Plugins && cap.Plugins.App) {
     // 뒤로 가기: 정보 창이 열려 있으면 닫고, 아니면 앱을 닫아 이전 앱(카카오톡 등)으로 돌아간다.
     cap.Plugins.App.addListener('backButton', function () {
-      var info = $('info');
-      if (info.open) { info.close(); return; }
+      var open = document.querySelector('dialog[open]');
+      if (open) { open.close(); return; }
       cap.Plugins.App.exitApp();
     });
     cap.Plugins.App.addListener('appUrlOpen', function (ev) { openNativeUrl(ev && ev.url); });

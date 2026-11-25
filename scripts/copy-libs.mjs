@@ -19,6 +19,10 @@ copyFileSync(join(nm, 'jszip', 'dist', 'jszip.min.js'), join(out, 'jszip.min.js'
 copyFileSync(join(nm, 'xlsx', 'dist', 'xlsx.full.min.js'), join(out, 'xlsx.full.min.js'));
 copyFileSync(join(nm, 'xlsx', 'LICENSE'), join(out, 'LICENSE-sheetjs.txt'));
 
+// dxf-parser — DXF 도면
+copyFileSync(join(nm, 'dxf-parser', 'dist', 'dxf-parser.js'), join(out, 'dxf-parser.js'));
+copyFileSync(join(nm, 'dxf-parser', 'LICENSE'), join(out, 'LICENSE-dxf-parser.txt'));
+
 // PDF.js — 안드로이드 웹뷰가 .mjs의 MIME 형식을 모를 수 있어 .js 이름으로 둔다.
 const pdf = join(nm, 'pdfjs-dist');
 copyFileSync(join(pdf, 'legacy', 'build', 'pdf.min.mjs'), join(out, 'pdf.min.js'));

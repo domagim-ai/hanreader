@@ -7,7 +7,7 @@
     return true;
   }
 
-  // 반환: { kind: 'pdf' | 'hwp' | 'hwpx' | 'xlsx'(XLS 포함) | 'txt' | 'unsupported', zip?, reason? }
+  // 반환: { kind: 'pdf' | 'hwp' | 'hwpx' | 'xlsx'(XLS 포함) | 'dxf' | 'txt' | 'unsupported', zip?, reason? }
   async function detectFormat(bytes) {
     // PDF는 앞에 약간의 쓰레기 바이트가 붙는 경우가 있어 처음 1KB 안에서 찾는다.
     var head = bytes.subarray(0, Math.min(bytes.length, 1024));
@@ -50,6 +50,16 @@
     if (startsWith(bytes, [0x48, 0x57, 0x50, 0x20, 0x44, 0x6F, 0x63])) {
       return { kind: 'unsupported', reason: 'HWP 3.0(1990년대 형식) 문서는 아직 지원하지 않습니다.' };
     }
+    // 오토캐드: DWG("AC10xx")와 이진 DXF는 못 읽고, 글자로 된 DXF("0 / SECTION"으로 시작)만 읽는다.
+    var top = '';
+    for (var j = 0; j < Math.min(bytes.length, 2048); j++) top += String.fromCharCode(bytes[j]);
+    if (/^AC1[0-9.]{3}/.test(top)) {
+      return { kind: 'unsupported', reason: 'DWG 도면은 아직 지원하지 않습니다. 캐드에서 DXF로 저장하면 열 수 있습니다.' };
+    }
+    if (top.indexOf('AutoCAD Binary DXF') === 0) {
+      return { kind: 'unsupported', reason: '이진(Binary) DXF는 아직 지원하지 않습니다. 캐드에서 일반(ASCII) DXF로 저장해 주세요.' };
+    }
+    if (/^(?:\xEF\xBB\xBF)?\s*(?:999\r?\n[^\n]*\n\s*)*0\r?\n\s*SECTION\s*\r?\n/.test(top)) return { kind: 'dxf' };
     return { kind: 'txt' };
   }
 
